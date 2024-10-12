@@ -1,55 +1,55 @@
 import { Entity } from "alclient";
-import { Blackboard, BlackboardMarkedKey } from "../core/Blackboard";
-import { BTNodeStatus } from "../core/BTNodeStatus";
-import { AsyncNode } from "../core/nodes/AsyncNode";
+import { Blackboard, BlackboardMarkedKey } from "../BehaviorTree/Blackboard";
+import { BTNodeStatus } from "../BehaviorTree/BTNodeStatus";
+import { AsyncNode } from "../BehaviorTree/nodes/AsyncNode";
 
 export interface BasicAttackProps {
-    BBKey?: BlackboardMarkedKey;
-    randomize?: boolean;
+  BBKey?: BlackboardMarkedKey;
+  randomize?: boolean;
 }
 
 export class BasicAttack extends AsyncNode {
-    BBKey: BlackboardMarkedKey;
+  BBKey: BlackboardMarkedKey;
 
-    randomize: boolean;
+  randomize: boolean;
 
-    constructor({ BBKey = "key:targets", randomize = false }: BasicAttackProps) {
-        super();
+  constructor({ BBKey = "key:targets", randomize = false }: BasicAttackProps) {
+    super();
 
-        this.BBKey = BBKey;
-        this.randomize = randomize;
+    this.BBKey = BBKey;
+    this.randomize = randomize;
+  }
+
+  override getNodeType(): string {
+    return "BasicAttack";
+  }
+
+  override getComment(): string {
+    return this.BBKey;
+  }
+
+  override async tickAsync(blackboard: Blackboard): Promise<BTNodeStatus> {
+    const targets = blackboard.get<Entity[]>(this.BBKey);
+
+    if (!targets || targets.length === 0) {
+      console.error("BasicAttack: no targets found in blackboard", this.BBKey);
+      return BTNodeStatus.Failure;
     }
 
-    override getNodeType(): string {
-        return "BasicAttack";
+    const chosen = this.randomize
+      ? targets[Math.floor(Math.random() * targets.length)]
+      : targets[0];
+
+    const result = await blackboard.character.basicAttack(chosen.id);
+
+    if (result.failed) {
+      console.error("BasicAttack: failed to attack", result.reason);
+      console.error(result);
+      return BTNodeStatus.Failure;
     }
 
-    override getComment(): string {
-        return this.BBKey;
-    }
+    this.debug("BasicAttack: attacked target", chosen.id);
 
-    override async tickAsync(blackboard: Blackboard): Promise<BTNodeStatus> {
-        const targets = blackboard.get<Entity[]>(this.BBKey);
-
-        if (!targets || targets.length === 0) {
-            console.error("BasicAttack: no targets found in blackboard", this.BBKey);
-            return BTNodeStatus.Failure;
-        }
-
-        const chosen = this.randomize
-            ? targets[Math.floor(Math.random() * targets.length)]
-            : targets[0];
-
-        const result = await blackboard.character.basicAttack(chosen.id);
-
-        if (result.failed) {
-            console.error("BasicAttack: failed to attack", result.reason);
-            console.error(result);
-            return BTNodeStatus.Failure;
-        }
-
-        this.debug("BasicAttack: attacked target", chosen.id);
-
-        return BTNodeStatus.Success;
-    }
+    return BTNodeStatus.Success;
+  }
 }

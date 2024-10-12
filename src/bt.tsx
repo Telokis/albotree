@@ -1,11 +1,11 @@
-import { btJsx } from "./BehaviorTree/jsx/jsxFactory";
+import { btJsx } from "./BehaviorTree/btJsx";
 import { Fallback } from "./BehaviorTree/nodes/Fallback";
 import { MoveTo } from "./ALNodes/MoveTo";
 import { IsMonsterNearby } from "./ALNodes/predicates/IsMonsterNearby";
 import { Sequence } from "./BehaviorTree/nodes/Sequence";
 import { IsAlive } from "./ALNodes/predicates/IsAlive";
 import { Respawn } from "./ALNodes/Respawn";
-import { ThrottleDecorator } from "./BehaviorTree/decorators/ThrottleDecorator";
+import { ThrottleDecorator } from "./BehaviorTree/nodes/decorators/ThrottleDecorator";
 import { AcquireTargets } from "./ALNodes/AcquireTargets";
 import { IsInRange } from "./ALNodes/predicates/IsInRange";
 import { MoveInRange } from "./ALNodes/MoveInRange";
@@ -16,11 +16,6 @@ import { HasPotions } from "./ALNodes/predicates/HasPotions";
 import { IsOnCooldown } from "./ALNodes/predicates/IsOnCooldown";
 import { DrinkPotion } from "./ALNodes/DrinkPotion";
 import { LootChests } from "./ALNodes/LootChests";
-
-// The import is tree-shaken, so we need to use it explicitely.
-// function btJsx(...args: Parameters<typeof _btJsx>) {
-//     return _btJsx(...args);
-// }
 
 const mobTarget = "crab";
 

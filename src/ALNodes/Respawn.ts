@@ -1,19 +1,19 @@
-import { Blackboard } from "../core/Blackboard";
-import { BTNodeStatus } from "../core/BTNodeStatus";
-import { AsyncNode } from "../core/nodes/AsyncNode";
+import { Blackboard } from "../BehaviorTree/Blackboard";
+import { BTNodeStatus } from "../BehaviorTree/BTNodeStatus";
+import { AsyncNode } from "../BehaviorTree/nodes/AsyncNode";
 
 export class Respawn extends AsyncNode {
-    override getNodeType(): string {
-        return "Respawn";
-    }
+  override getNodeType(): string {
+    return "Respawn";
+  }
 
-    override getComment(): string {
-        return "";
-    }
+  override getComment(): string {
+    return "";
+  }
 
-    override async tickAsync(blackboard: Blackboard): Promise<BTNodeStatus> {
-        await blackboard.character.respawn();
+  override async tickAsync(blackboard: Blackboard): Promise<BTNodeStatus> {
+    await blackboard.character.respawn();
 
-        return BTNodeStatus.Success;
-    }
+    return BTNodeStatus.Success;
+  }
 }
