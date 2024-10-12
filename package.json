@@ -1,0 +1,17 @@
+{
+  "name": "albotree",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@telokys/eslint-config-typescript": "^2.0.5",
+    "@types/bun": "latest",
+    "@types/debug": "^4.1.12"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "alclient": "^0.21.6",
+    "debug": "^4.3.7"
+  }
+}
